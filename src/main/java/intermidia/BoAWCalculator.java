@@ -92,7 +92,7 @@ public class BoAWCalculator
 		{
 			System.out.println("Processing shot " + shotn);
 			//Print shot number
-			boawWriter.write(shotn++ + " ");
+			boawWriter.write(Integer.toString(shotn++));
 			
 			//Create and initialize aural word histogram for a shot			
 			int[] mfccHistogram = new int[k];
@@ -110,7 +110,7 @@ public class BoAWCalculator
 			
 			for(int i = 0; i < k; i++)
 			{
-				boawWriter.write(mfccHistogram[i] + " ");
+				boawWriter.write(" " + mfccHistogram[i]);
 			}
 			boawWriter.write("\n");			
 		}
