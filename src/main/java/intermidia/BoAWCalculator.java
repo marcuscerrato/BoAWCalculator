@@ -20,15 +20,11 @@ import TVSSUnits.ShotList;
 
 public class BoAWCalculator 
 {
-	private static int k = 15;
+	private static int k = 30;
 	private static int clusteringSteps = 50;
 	
     public static void main( String[] args ) throws Exception 
     {    	
-    	if(args[2] != null)
-    	{
-    		k = Integer.parseInt(args[2]);
-    	}
     	//Read MFCC features from CSV file.
     	CSVReader featureReader = new CSVReader(new FileReader(args[0]), ' ');
 		String [] line;
@@ -115,6 +111,23 @@ public class BoAWCalculator
 			boawWriter.write("\n");			
 		}
 		boawWriter.close();
+		
+		//Print aural words to file
+		FileWriter awWriter = new FileWriter(args[2]);
+		for(int i = 0; i < centroids.numClusters(); i++)
+		{
+			for(int j = 0; j < centroids.numDimensions(); j++)
+			{
+				if(j < centroids.numDimensions() - 1)
+				{
+					awWriter.write(centroids.getCentroids()[i][j] + " ");
+				}else
+				{
+					awWriter.write(centroids.getCentroids()[i][j] + "\n");
+				}
+			}
+		}
+		awWriter.close();
     }
 }
 
