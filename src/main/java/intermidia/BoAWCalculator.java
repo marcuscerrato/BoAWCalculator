@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import org.openimaj.data.DataSource;
 import org.openimaj.data.DoubleArrayBackedDataSource;
 import org.openimaj.feature.DoubleFV;
+import org.openimaj.feature.DoubleFVComparison;
+import org.openimaj.math.statistics.distribution.Histogram;
 import org.openimaj.ml.clustering.DoubleCentroidsResult;
 import org.openimaj.ml.clustering.assignment.HardAssigner;
 import org.openimaj.ml.clustering.kmeans.DoubleKMeans;
@@ -91,7 +93,7 @@ public class BoAWCalculator
 			boawWriter.write(Integer.toString(shotn++));
 			
 			//Create and initialize aural word histogram for a shot			
-			int[] mfccHistogram = new int[k];
+			double[] mfccHistogram = new double[k];
 			for(int i = 0; i < k; i++)
 			{
 				mfccHistogram[i] = 0;
@@ -103,6 +105,12 @@ public class BoAWCalculator
 				//Increase the ocurrence of an aural word in the histogram
 				mfccHistogram[hardAssigner.assign(mfccFV.values)]++;
 			}
+			
+			//Set shot feature histogram for use in intershot distance
+
+			Histogram featureHistogram = new Histogram(mfccHistogram);
+			featureHistogram = new Histogram(featureHistogram.normaliseFV());
+			shot.setFeatureWordHistogram(featureHistogram);
 			
 			for(int i = 0; i < k; i++)
 			{
@@ -128,6 +136,15 @@ public class BoAWCalculator
 			}
 		}
 		awWriter.close();
+		
+		
+		//Print intershot distances
+		for(int i = 0; i < (shotList.listSize() - 1); i++)
+		{
+			double intershotDist = shotList.getShot(i).getFeatureWordHistogram().compare(shotList.getShot(i + 1).getFeatureWordHistogram(), 
+					DoubleFVComparison.COSINE_SIM);
+			System.out.println("Sim " +  i + "/" + (i + 1) + ": " + intershotDist);
+		}
     }
 }
 
