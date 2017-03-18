@@ -38,7 +38,7 @@ public class BoAWCalculator
 		//Build shot list with MFCC keypoints
 		while ((line = featureReader.readNext()) != null) 
 		{
-			int currentShot = Byte.parseByte(line[0]);
+			int currentShot = Integer.parseInt(line[0]);
 			//It must be a while because there can be shots without descriptors
 			while(currentShot != lastShot)
 			{
