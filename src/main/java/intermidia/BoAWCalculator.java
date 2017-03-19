@@ -25,6 +25,7 @@ public class BoAWCalculator
 	private static int k = 30;
 	private static int clusteringSteps = 50;
 	
+	//Usage: <in: aural feature vectors> <out: aural histograms> <in: k> <in: clustering steps>
     public static void main( String[] args ) throws Exception 
     {    	
     	//Read MFCC features from CSV file.
@@ -34,6 +35,16 @@ public class BoAWCalculator
 		int lastShot = -1;	
 		int mfccFVTotal = 0;
 		int fvSize = 0;
+		
+		/*Set k and maximum clustering steps*/
+		if(args.length > 2)
+		{
+			k = Integer.parseInt(args[2]);
+		}
+		if(args.length > 3)
+		{
+			clusteringSteps = Integer.parseInt(args[3]);
+		}
 		
 		//Build shot list with MFCC keypoints
 		while ((line = featureReader.readNext()) != null) 
@@ -114,14 +125,14 @@ public class BoAWCalculator
 			
 			for(int i = 0; i < k; i++)
 			{
-				boawWriter.write(" " + mfccHistogram[i]);
+				boawWriter.write(" " + (int)mfccHistogram[i]);
 			}
 			boawWriter.write("\n");			
 		}
 		boawWriter.close();
 		
 		//Print aural words to file
-		FileWriter awWriter = new FileWriter(args[2]);
+/*		FileWriter awWriter = new FileWriter(args[2]);
 		for(int i = 0; i < centroids.numClusters(); i++)
 		{
 			for(int j = 0; j < centroids.numDimensions(); j++)
@@ -135,7 +146,7 @@ public class BoAWCalculator
 				}
 			}
 		}
-		awWriter.close();
+		awWriter.close();*/
 		
 		
 		//Print intershot distances
