@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import org.openimaj.data.DataSource;
 import org.openimaj.data.DoubleArrayBackedDataSource;
 import org.openimaj.feature.DoubleFV;
-import org.openimaj.feature.DoubleFVComparison;
 import org.openimaj.math.statistics.distribution.Histogram;
 import org.openimaj.ml.clustering.DoubleCentroidsResult;
 import org.openimaj.ml.clustering.assignment.HardAssigner;
@@ -88,7 +87,7 @@ public class BoAWCalculator
 		DataSource<double []> kmeansDataSource = new DoubleArrayBackedDataSource(allMfccKeypoints);
 		DoubleKMeans clusterer = DoubleKMeans.createExact(k, clusteringSteps);
 		//$centroids have size $k, and each vector have 13 double values
-		System.out.println("Clustering MFCC Feature Vectors into "+ k + " aural words.");
+		//System.out.println("Clustering MFCC Feature Vectors into "+ k + " aural words.");
 		DoubleCentroidsResult centroids = clusterer.cluster(kmeansDataSource);
 		
 		//Create the assigner, it is capable of assigning a feature vector to a cluster (to a centroid)
@@ -99,7 +98,7 @@ public class BoAWCalculator
 		FileWriter boawWriter = new FileWriter(args[1]);
 		for(Shot shot: shotList.getList())
 		{
-			System.out.println("Processing shot " + shotn);
+			//System.out.println("Processing shot " + shotn);
 			//Print shot number
 			boawWriter.write(Integer.toString(shotn++));
 			
@@ -150,12 +149,12 @@ public class BoAWCalculator
 		
 		
 		//Print intershot distances
-		for(int i = 0; i < (shotList.listSize() - 1); i++)
+		/*for(int i = 0; i < (shotList.listSize() - 1); i++)
 		{
 			double intershotDist = shotList.getShot(i).getFeatureWordHistogram().compare(shotList.getShot(i + 1).getFeatureWordHistogram(), 
 					DoubleFVComparison.COSINE_SIM);
 			System.out.println("Sim " +  i + "/" + (i + 1) + ": " + intershotDist);
-		}
+		}*/
     }
 }
 
